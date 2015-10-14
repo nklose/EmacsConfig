@@ -2,6 +2,9 @@
 (custom-set-variables '(inhibit-startup-screen t))
 (custom-set-faces)
 
+;; Set emacs-color-theme-solarized, from https://github.com/sellout/
+(load-theme 'wheatgrass)
+
 ;; Use standard keys for copy/paste/undo
 (cua-mode)                             
 
