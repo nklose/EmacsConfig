@@ -1,11 +1,11 @@
-;; Emacs configuration file for Nick Klose (nick.klose@ualberta.ca)
+;; Emacs configuration file for Nick Klose
 (custom-set-variables '(inhibit-startup-screen t))
 (custom-set-faces)
 
 ;; Set emacs-color-theme-solarized, from https://github.com/sellout/
 (load-theme 'wheatgrass)
 
-;; Use standard keys for copy/paste/undo
+;; Windows-style cut/copy/paste
 (cua-mode)                             
 
 ;; Use the F12 key to compile
@@ -28,42 +28,39 @@
 ;; Treat new buffers as text files
 (setq default-major-mode 'text-mode)
 
-;; Function to delete an entire line
-;; Code from http://homepages.inf.ed.ac.uk/s0243221/emacs/
-
-;; First define a variable which will store the previous column position
+;; Nuke Line function (http://homepages.inf.ed.ac.uk/s0243221/emacs/)
+;; Create a variable to store the column position
 (defvar previous-column nil "Save the column position")
 
-;; Define the nuke-line function. The line is killed, then the newline
-;; character is deleted. The column which the cursor was positioned at is then
-;; restored. Because the kill-line function is used, the contents deleted can
-;; be later restored by usibackward-delete-char-untabifyng the yank commands.
+;; Define the nuke-line function
 (defun nuke-line()
   "Kill an entire line, including the trailing newline character"
   (interactive)
 
-  ;; Store the current column position, so it can later be restored for a more
-  ;; natural feel to the deletion
+  ;; Store the current column position
   (setq previous-column (current-column))
 
-  ;; Now move to the end of the current line
+  ;; Move to the end of the current line
   (end-of-line)
 
-  ;; Test the length of the line. If it is 0, there is no need for a
-  ;; kill-line. All that happens in this case is that the new-line character
-  ;; is deleted.
+  ;; Check the line's length
   (if (= (current-column) 0)
     (delete-char 1)
 
-    ;; This is the 'else' clause. The current line being deleted is not zero
-    ;; in length. First remove the line by moving to its start and then
-    ;; killing, followed by deletion of the newline character, and then
-    ;; finally restoration of the column position.
+    ;; Remove the line
     (progn
       (beginning-of-line)
       (kill-line)
       (delete-char 1)
       (move-to-column previous-column))))
 
-;; Now bind the delete line function to the F10 key
+;; Bind delete line function to F10
 (global-set-key [f10] 'nuke-line)
+
+;; Write backups to ~/.emacs.d/backup/ instead of leaving them in the original folder
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+      backup-by-copying      t  ; Don't de-link hard links
+      version-control        t  ; Use version numbers on backups
+      delete-old-versions    t  ; Automatically delete excess backups:
+      kept-new-versions      20 ; how many of the newest versions to keep
+      kept-old-versions      5) ; and how many of the old
