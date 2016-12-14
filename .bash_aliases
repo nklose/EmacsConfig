@@ -30,5 +30,8 @@ alias fgrep='fgrep --color=auto'
 ## Network commands ##
 alias weather='curl http://wttr.in/Edmonton'
 alias moon='curl http://wttr.in/Moon'
-alias ping='ping -c 5'								# restrict echo requests
+alias ping='ping -c 5'					# restrict echo requests
 alias myip='curl http://ipecho.net/plain; echo'		# show public IP
+
+## Miscellaneous ##
+alias ax='sudo chmod a+x'
